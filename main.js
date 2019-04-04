@@ -11,12 +11,18 @@ function fetchFunction() {
             cityData = cityData.replace(/\"/g, "");
             document.getElementById("location").append(cityData);
 
-            // let date = new Date(data.forecast.forecastday[0].date_epoch * 1000);
+            const dateOptions = {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            };
 
             data.forecast.forecastday.forEach((forecast) => {
                 let date = new Date(forecast.date_epoch * 1000);
+                date = date.toLocaleDateString('en-GB', dateOptions);
                 let icon = forecast.day.condition.icon;
                 let weatherText = forecast.day.condition.text;
+                let celsius = forecast.day.avgtemp_c;
 
                 function createNode(element) {
                     return document.createElement(element);
@@ -24,26 +30,31 @@ function fetchFunction() {
 
                 function append(parent, el) {
                     return parent.appendChild(el);
-                  }
+                }
 
-                    let ul = document.getElementById("icon");
-                    let li = createNode('li')
-                    let img = createNode('img');
-                    img.src =`http:${icon}`;
-                    append(li, img)
-                    append(ul, li)
+                let tbDate = document.getElementById('date');
+                let tableHeader = createNode('th');
+                tableHeader.innerHTML = date;
+                append(tbDate, tableHeader);
 
-                    let ulDate = document.getElementById('date');
-                    let p = createNode('p');
-                    p.innerHTML = date;
-                    append(ulDate, li)
-                    append(li, p)
+                let tbIcon = document.getElementById('icon');
+                let tableImg = createNode('td');
+                let img = createNode('img');
+                img.src = `http:${icon}`;
+                tableImg.append(img);
+                append(tableImg, img);
+                append(tbIcon, tableImg);
 
-                    let ulText = document.getElementById('weatherText');
-                    let pText = createNode('p');
-                    pText.innerHTML = weatherText;
-                    append(ulText, li);
-                    append(li, pText);
+                let tbText = document.getElementById('weatherText');
+                let tableData = createNode('td');
+                tableData.innerHTML = weatherText;
+                append(tbText, tableData);
+
+                let tbCelsius = document.getElementById('celsius');
+                let tbDataCel = createNode('td');
+                tbDataCel.innerHTML = `${celsius}  &#8451`;
+                append(tbCelsius, tbDataCel);
+
             });
         })
         .catch(error => console.log('error'))
