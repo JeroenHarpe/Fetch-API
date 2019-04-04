@@ -1,9 +1,15 @@
 document.querySelector('#button1').addEventListener('click', fetchFunction)
-const url = 'http://api.apixu.com/v1/forecast.json?key=c03a1c43ebd94ad59eb80153190204&q=kathmandu&days=5';
+// const url = 'http://api.apixu.com/v1/forecast.json?key=c03a1c43ebd94ad59eb80153190204&q=kathmandu&days=5';
+
+function getUrl(){
+let location = document.getElementById('getLocation').value
+let url = `http://api.apixu.com/v1/forecast.json?key=c03a1c43ebd94ad59eb80153190204&q=${location}&days=5`;
+return url;
+}
 
 
 function fetchFunction() {
-    fetch(url)
+    fetch(getUrl())
         .then(response => response.json())
         .then(data => {
 
